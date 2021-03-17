@@ -1,7 +1,9 @@
 ---
 title: cuda cudnn torch的配置
 date: 2021-03-17 14:21:25
-tags: MMDET安装
+tags: 
+      - MMDET安装 
+      - 实验室文档
 ---
 1. 安装cuda
 

@@ -1,7 +1,9 @@
 ---
 title: MMDET的安装和使用
 date: 2021-03-17 14:25:39
-tags: MMDET安装
+tags: 
+      - MMDET安装 
+      - 实验室文档
 ---
 
 ### 一、链接
