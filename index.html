@@ -182,6 +182,102 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2021/03/20/yolo-V1-%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0%E7%9A%84%E7%90%86%E8%A7%A3/">yolo V1 损失函数的理解</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/03/20/yolo-V1-%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0%E7%9A%84%E7%90%86%E8%A7%A3/">
+          
+          
+            
+          
+          YOLO V1损失函数的理解
+
+每一项说明
+第一项：遍历每个网格（Grid）中的每一个边界框（Bounding BOX，BBOX），其中网格有$S^2$个，预测框有B个。
+$\mathbb{I}^{obj}_{ij}$ 表示若第i个网格中第j个边界框含有对象（OBJ）则该值为1 ，否则为0。
+$[(x_i-\bar{x}_i)^2+(y_i-\bar{y}_i)^2]$表示中心坐标的平方差损失。
+
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-03-20 19:38" pubdate>
+              2021-03-20
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">目标检测</a>
+            
+              <a href="/tags/YOLO/">YOLO</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/03/20/%E4%BD%BF%E7%94%A8dpkg%E5%AE%89%E8%A3%85teamviewer%E5%90%8E%E6%97%A0%E6%B3%95%E6%89%93%E5%BC%80%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">使用dpkg安装teamviewer后无法打开解决方法</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/03/20/%E4%BD%BF%E7%94%A8dpkg%E5%AE%89%E8%A3%85teamviewer%E5%90%8E%E6%97%A0%E6%B3%95%E6%89%93%E5%BC%80%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">
+          
+          
+            
+          
+          
+dpkg安装teamviewer
+1dkpg -i teamviewer_15.2.2756_amd64.deb
+会遇到打不开的情况，详细观察会发现在安装时就告诉缺少相关依赖
+1sudo apt-get install -f
+
+
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-03-20 19:32" pubdate>
+              2021-03-20
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Teamviewer/">Teamviewer</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2021/03/17/%E4%BD%BF%E7%94%A8apt%E5%AE%89%E8%A3%85Nvidia%E9%A9%B1%E5%8A%A8/">使用apt安装Nvidia驱动</a>
       </h1>
 
@@ -441,7 +537,7 @@ mmcv（商汤的一个cv库）
 
 
 安装
-12345678910111213141516171819202122 sudo sh cuda_10.0.130_410.48_linux.run# 按z快进# 选项Do you accept the previously read EULA?accept/decline/quit: acceptInstall NVIDIA Accelerated Graphics D
+12345678910111213141516171819202122sudo sh cuda_10.0.130_410.48_linux.run# 按z快进# 选项Do you accept the previously read EULA?accept/decline/quit: acceptInstall NVIDIA Accelerated Graphics Dr
         </a>
       </p>
 
