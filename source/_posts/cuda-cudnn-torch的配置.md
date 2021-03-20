@@ -10,7 +10,7 @@ tags:
 - 安装
 
   ```bash
-   sudo sh cuda_10.0.130_410.48_linux.run
+  sudo sh cuda_10.0.130_410.48_linux.run
   # 按z快进
   # 选项
   Do you accept the previously read EULA?
