@@ -4,6 +4,27 @@
   
   
   <entry>
+    <title>windows 安装mmdet</title>
+    <link href="/2021/04/01/windows-%E5%AE%89%E8%A3%85mmdet/"/>
+    <url>/2021/04/01/windows-%E5%AE%89%E8%A3%85mmdet/</url>
+    
+    <content type="html"><![CDATA[<h2 id="由于甲方的项目必须在Windows上运行，但是mmdet对window支持不太友好，所以写了一个文档"><a href="#由于甲方的项目必须在Windows上运行，但是mmdet对window支持不太友好，所以写了一个文档" class="headerlink" title="由于甲方的项目必须在Windows上运行，但是mmdet对window支持不太友好，所以写了一个文档"></a>由于甲方的项目必须在Windows上运行，但是mmdet对window支持不太友好，所以写了一个文档</h2><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul><li><a href="https://blog.csdn.net/bingo_liu/article/details/103224730">windows10安装cuda10.2</a></li><li><a href="https://zhuanlan.zhihu.com/p/308281195">WINDOWS 下 MMCV | MMCV-full 的安装</a></li></ul><h2 id="依赖安装"><a href="#依赖安装" class="headerlink" title="依赖安装"></a>依赖安装</h2><p><a href="https://pan.baidu.com/s/13rnuoTin-FydurQlzf4y2g">百度网盘</a>    </p><p>密码：fctv</p><p>依赖如图所示：</p><p><img src="/img/article/%E4%BE%9D%E8%B5%96.PNG" alt="依赖"></p><h3 id="一、cuda和cudnn安装"><a href="#一、cuda和cudnn安装" class="headerlink" title="一、cuda和cudnn安装"></a>一、cuda和cudnn安装</h3><ol><li><p>安装cuda11</p><ul><li><p>双击后运行，选择ok<br><img src="/img/article/p1.PNG" alt="启动界面"></p></li><li><p>进入自定义安装</p></li><li><p>在CUDA里取消VIsual Studio Intergration的选择</p><p>至于驱动，NCIDIA GeForce，可以先桌面右键打开NVIDIA控制面板，帮助-&gt;系统信息-&gt;组件，查看显卡驱动版本。<br><img src="/img/article/p2.PNG" alt="驱动信息"></p><blockquote><p>如果本机的驱动版本(当前版本)小于cuda对应的版本（新版本），则选择，否则不选。如果当前版本小于新版本，并且不覆盖安装，之后电脑会频繁蓝屏或死机</p></blockquote></li></ul></li><li><p>安装cudnn8.1</p><ul><li>解压文件后，将对应的文件拷贝到cuda的安装目录<code>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.0</code></li></ul></li><li><p>在终端输入<code>nvcc -V</code>查看是否有输出</p></li></ol><h3 id="二、vs-BuildTools安装"><a href="#二、vs-BuildTools安装" class="headerlink" title="二、vs_BuildTools安装"></a>二、vs_BuildTools安装</h3><ul><li>注：选择2019的16.8.6版本，16.9版本会出现问题，选择C++生成工具即可</li><li>为cl添加环境变量，找到安装路径，并添加到PATH。例如添加 <code>C:\Program Files (x86)\Microsoft Visual Studio\2019\BUildTools\VC\Tools\MSVC\14.27.29110\bin\Hostx86\x64</code> 到 <code>PATH</code></li></ul><p><img src="/img/article/build.PNG" alt="BUildTools界面"></p><h3 id="三、torch和torchvision安装"><a href="#三、torch和torchvision安装" class="headerlink" title="三、torch和torchvision安装"></a>三、torch和torchvision安装</h3><ol><li><p>conda创建新环境</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">conda create --n mmdet python=3.7<br></code></pre></td></tr></table></figure></li><li><p>pip install离线安装两个包</p></li></ol><h3 id="四、mmcv的编译"><a href="#四、mmcv的编译" class="headerlink" title="四、mmcv的编译"></a>四、mmcv的编译</h3><ol><li><p>git克隆并进入mmcv</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> https://github.com/open-mmlab/mmcv.git  <span class="hljs-comment"># 可以用国内源加速</span><br>git checkout v1.2.7  <span class="hljs-comment"># 更换为1.2.7版本</span><br><span class="hljs-built_in">cd</span> mmcv<br>pip install -r requirements.txt  <span class="hljs-comment">#安装所需 Python 依赖包</span><br></code></pre></td></tr></table></figure></li><li><p>修改torch源代码防止utf-8的问题</p><p>在conda安装环境<code>envs\mmdet\Lib\site-packages\torch\utils\cpp_extension.py</code>将所有decode替换成decode(‘utf-8’,’ignore’)</p></li><li><p>添加环境变量并本地编译<br>注：使用powershell，若没有conda actite可以在里面输入conda init powershell</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-variable">$env</span>:MMCV_WITH_OPS = 1<br><span class="hljs-variable">$env</span>:MAX_JOBS = 8 <span class="hljs-comment"># 根据你可用CPU以及内存量进行设置</span><br><span class="hljs-variable">$env</span>:CUDA_HOME = <span class="hljs-variable">$env</span>:CUDA_PATH_V11_0<br><span class="hljs-variable">$env</span>:TORCH_CUDA_ARCH_LIST=<span class="hljs-string">&quot;6.1&quot;</span> <span class="hljs-comment"># 设置算力 GTX 1080为6.1</span><br></code></pre></td></tr></table></figure><ul><li>也可以直接用<code>pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/cu110/torch1.7.0/index.html </code></li></ul></li></ol><h3 id="五、mmdetection的安装"><a href="#五、mmdetection的安装" class="headerlink" title="五、mmdetection的安装"></a>五、mmdetection的安装</h3><ul><li>通之前linux系统一样，选择2.10版本</li></ul>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>实验室文档</tag>
+      
+      <tag>MMDET</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>MMDET加入数据增强</title>
     <link href="/2021/03/22/MMDET%E5%8A%A0%E5%85%A5%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%BC%BA/"/>
     <url>/2021/03/22/MMDET%E5%8A%A0%E5%85%A5%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%BC%BA/</url>
