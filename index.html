@@ -182,6 +182,89 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2021/06/15/ubuntu%E5%AE%89%E8%A3%85rabbitMQ/">ubuntu安装rabbitMQ</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/06/15/ubuntu%E5%AE%89%E8%A3%85rabbitMQ/">
+          
+          
+            
+          
+          
+安装erlang
+1sudo apt-get install erlang-nox
+安装Rabbitmq
+1sudo apt-get install rabbitmq-server
+添加admin，并赋予administrator权限
+12345678# 添加admin用户，密码设置为adminsudo rabbitmqctl add_user  admin  admin  # 赋予权限sudo
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-06-15 16:09" pubdate>
+              2021-06-15
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/04/15/%E5%9C%A8lxd%E5%AE%B9%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8docker%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/">在lxc容器中使用docker遇到的问题</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/04/15/%E5%9C%A8lxd%E5%AE%B9%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8docker%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/">
+          
+          
+            
+          
+          运行hello-world镜像出错12345678$ sudo docker run hello-worldUnable to find image &#x27;hello-world:latest&#x27; locallylatest: Pulling from library/hello-worldc04b14da8d14: Extracting    974 B/974 Bdocker: 
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-04-15 10:46" pubdate>
+              2021-04-15
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/LXD/">LXD</a>
+            
+              <a href="/tags/Docker/">Docker</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2021/04/01/windows-%E5%AE%89%E8%A3%85mmdet/">windows 安装mmdet</a>
       </h1>
 
@@ -195,18 +278,10 @@
 windows10安装cuda10.2
 WINDOWS 下 MMCV | MMCV-full 的安装
 
-依赖安装百度网盘    
-密码：fctv
-依赖如图所示：
 
-一、cuda和cudnn安装
-安装cuda11
-
-双击后运行，选择ok
-
-进入自定义安装
-
-在CUDA里取消VIsual Stud
+202106更新mmcv(1.2.4)可以直接使用预编译包，通过pip安装，跳过二三四步，直接编译mmdet(2.10)
+mmcv(1.2.7)和mmdet(2.13)也可以
+1pip i
         </a>
       </p>
 
@@ -549,105 +624,6 @@ dpkg安装teamviewer
             <i class="iconfont icon-tags"></i>
             
               <a href="/tags/%E4%B8%80%E4%BA%9B%E5%B0%8Ftips/">一些小tips</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/03/17/cuda%E5%A4%9A%E7%89%88%E6%9C%AC%E7%9A%84%E5%88%87%E6%8D%A2/">cuda多版本的切换</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/03/17/cuda%E5%A4%9A%E7%89%88%E6%9C%AC%E7%9A%84%E5%88%87%E6%8D%A2/">
-          
-          
-            
-          
-          cuda版本切换123sudo rm -rf /usr/local/cuda  #删除之前生成的软链接sudo ln -s /usr/local/cuda-10.0 /usr/local/cuda #生成新的软链接nvcc -V #查看当前cuda版本
-
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-03-17 22:33" pubdate>
-              2021-03-17
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E4%B8%80%E4%BA%9B%E5%B0%8Ftips/">一些小tips</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/03/17/LXD%E5%AE%B9%E5%99%A8%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/">LXD容器配置和使用</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/03/17/LXD%E5%AE%B9%E5%99%A8%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BD%BF%E7%94%A8/">
-          
-          
-            
-          
-          reference:
-实验室GPU服务器的LXD虚拟化
-使用 LXD 搭建多人使用的 GPU 服务器
-LXD 2.15 中的存储管理
-Ubuntu上使用ZFS（Zettabyte File System）
-华元主页
-
-配置1. lxd的安装与初始化
-安装lxd
-说明
-
-LXD 实现虚拟容器
-ZFS 用于管理物理磁盘，支持LXD高级功能
-bridge-utils 用于搭建网桥
-
-
-安装LXD、ZFS
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-03-17 22:30" pubdate>
-              2021-03-17
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%96%87%E6%A1%A3/">实验室文档</a>
             
           </div>
         
