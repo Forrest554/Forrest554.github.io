@@ -1,0 +1,441 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#C3DAC0">
+  <meta name="description" content="">
+  <meta name="author" content="Euler">
+  <meta name="keywords" content="">
+  
+  <title>MMDET中logger思考 - Euler Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.9-a","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>欧拉不吃鱼</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.jpeg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="MMDET中logger思考">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-08-16 17:45" pubdate>
+        2021年8月16日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      733 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      12
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">MMDET中logger思考</h1>
+            
+            <div class="markdown-body">
+              <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近项目对MMDET进行二次开发时，发现在使用mmdet中的logger时候，发现在同一个进程（主进程），指向的logger对象只有一个跟logger，也就是说，即使传给函数不用的输出打印位置，最后都只在一个文件里有显示。<br>而项目中，需要对不同的训练任务，指定不同的位置log。通过阅读mmdet、mmcv、logging源码，做出如下修改。</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><ol>
+<li><p>原函数查看对mmdet的<code>mmdetection/tools/train.py</code>文件中的<code>get_root_logger</code>进行查看，发现最后是<code>mmcv/utils/logging.py</code>文件的<code>get_logger</code>函数，可以看到原函数通过判断name是否存在，返回相应的logger对象，因为每次训练都是“mmdet”，所以返回的logger都是同一个。因此把这一个判断删除，冰球修改句柄中的File句柄就可以了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># mmdetection/tools/train.py 训练调用的函数</span><br><span class="hljs-keyword">from</span> mmdet.utils <span class="hljs-keyword">import</span> get_root_logger<br><br>logger = get_root_logger(log_file=log_file, log_level=cfg.log_level)<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># mmdet的 中的get_root_logger原型</span><br><br><span class="hljs-keyword">from</span> mmcv.utils <span class="hljs-keyword">import</span> get_logger<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_root_logger</span>(<span class="hljs-params">log_file=<span class="hljs-literal">None</span>, log_level=logging.INFO</span>):</span><br>    <span class="hljs-string">&quot;&quot;&quot;Get root logger.</span><br><span class="hljs-string"></span><br><span class="hljs-string">    Args:</span><br><span class="hljs-string">        log_file (str, optional): File path of log. Defaults to None.</span><br><span class="hljs-string">        log_level (int, optional): The level of logger.</span><br><span class="hljs-string">            Defaults to logging.INFO.</span><br><span class="hljs-string"></span><br><span class="hljs-string">    Returns:</span><br><span class="hljs-string">        :obj:`logging.Logger`: The obtained logger</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    logger = get_logger(name=<span class="hljs-string">&#x27;mmdet&#x27;</span>, log_file=log_file, log_level=log_level)<br><br>    <span class="hljs-keyword">return</span> logger<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># mmcv/utils/logging.py</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_logger</span>(<span class="hljs-params">name, log_file=<span class="hljs-literal">None</span>, log_level=logging.INFO, file_mode=<span class="hljs-string">&#x27;w&#x27;</span></span>):</span><br>    <span class="hljs-string">&quot;&quot;&quot;Initialize and get a logger by name.</span><br><span class="hljs-string"></span><br><span class="hljs-string">    If the logger has not been initialized, this method will initialize the</span><br><span class="hljs-string">    logger by adding one or two handlers, otherwise the initialized logger will</span><br><span class="hljs-string">    be directly returned. During initialization, a StreamHandler will always be</span><br><span class="hljs-string">    added. If `log_file` is specified and the process rank is 0, a FileHandler</span><br><span class="hljs-string">    will also be added.</span><br><span class="hljs-string"></span><br><span class="hljs-string">    Args:</span><br><span class="hljs-string">        name (str): Logger name.</span><br><span class="hljs-string">        log_file (str | None): The log filename. If specified, a FileHandler</span><br><span class="hljs-string">            will be added to the logger.</span><br><span class="hljs-string">        log_level (int): The logger level. Note that only the process of</span><br><span class="hljs-string">            rank 0 is affected, and other processes will set the level to</span><br><span class="hljs-string">            &quot;Error&quot; thus be silent most of the time.</span><br><span class="hljs-string">        file_mode (str): The file mode used in opening log file.</span><br><span class="hljs-string">            Defaults to &#x27;w&#x27;.</span><br><span class="hljs-string"></span><br><span class="hljs-string">    Returns:</span><br><span class="hljs-string">        logging.Logger: The expected logger.</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    logger = logging.getLogger(name)<br>    <span class="hljs-keyword">if</span> name <span class="hljs-keyword">in</span> logger_initialized:<br>        <span class="hljs-keyword">return</span> logger<br>    <span class="hljs-comment"># handle hierarchical names</span><br>    <span class="hljs-comment"># e.g., logger &quot;a&quot; is initialized, then logger &quot;a.b&quot; will skip the</span><br>    <span class="hljs-comment"># initialization since it is a child of &quot;a&quot;.</span><br>    <span class="hljs-keyword">for</span> logger_name <span class="hljs-keyword">in</span> logger_initialized:<br>        <span class="hljs-keyword">if</span> name.startswith(logger_name):<br>            <span class="hljs-keyword">return</span> logger<br><br>    stream_handler = logging.StreamHandler()<br>    handlers = [stream_handler]<br><br>    <span class="hljs-keyword">if</span> dist.is_available() <span class="hljs-keyword">and</span> dist.is_initialized():<br>        rank = dist.get_rank()<br>    <span class="hljs-keyword">else</span>:<br>        rank = <span class="hljs-number">0</span><br><br>    <span class="hljs-comment"># only rank 0 will add a FileHandler</span><br>    <span class="hljs-keyword">if</span> rank == <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> log_file <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span>:<br>        <span class="hljs-comment"># Here, the default behaviour of the official logger is &#x27;a&#x27;. Thus, we</span><br>        <span class="hljs-comment"># provide an interface to change the file mode to the default</span><br>        <span class="hljs-comment"># behaviour.</span><br>        file_handler = logging.FileHandler(log_file, file_mode)<br>        handlers.append(file_handler)<br><br>    formatter = logging.Formatter(<br>        <span class="hljs-string">&#x27;%(asctime)s - %(name)s - %(levelname)s - %(message)s&#x27;</span>)<br>    <span class="hljs-keyword">for</span> handler <span class="hljs-keyword">in</span> handlers:<br>        handler.setFormatter(formatter)<br>        handler.setLevel(log_level)<br>        logger.addHandler(handler)<br><br>    <span class="hljs-keyword">if</span> rank == <span class="hljs-number">0</span>:<br>        logger.setLevel(log_level)<br>    <span class="hljs-keyword">else</span>:<br>        logger.setLevel(logging.ERROR)<br><br>    logger_initialized[name] = <span class="hljs-literal">True</span><br><br>    <span class="hljs-keyword">return</span> logger<br></code></pre></td></tr></table></figure></li>
+<li><p>重写自己的<code>get_root_logger</code>，由于项目用不到分布式训练，因此可以对其进行简化</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> logging<br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">euler_get_logger</span>(<span class="hljs-params">name, log_file=<span class="hljs-literal">None</span>, log_level=logging.INFO, file_mode=<span class="hljs-string">&#x27;w&#x27;</span></span>):</span><br><br>    logger = logging.getLogger(name)<br>    logger.handlers = []<br>    stream_handler = logging.StreamHandler()<br>    handlers = [stream_handler]<br>    <span class="hljs-keyword">if</span> log_file <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span>:<br>        file_handler = logging.FileHandler(log_file, file_mode)<br>        handlers.append(file_handler)<br><br>    formatter = logging.Formatter(<br>        <span class="hljs-string">&#x27;%(asctime)s - %(name)s - %(levelname)s - %(message)s&#x27;</span>)<br>    <span class="hljs-keyword">for</span> handler <span class="hljs-keyword">in</span> handlers:<br>        handler.setFormatter(formatter)<br>        handler.setLevel(log_level)<br>        logger.addHandler(handler)<br><br>    logger.setLevel(log_level)<br>    <span class="hljs-keyword">return</span> logger<br>  <br><span class="hljs-comment"># main函数使用</span><br>logger = euler_get_logger(name=<span class="hljs-string">&quot;mmdet&quot;</span>, log_file=self.log_file)<br></code></pre></td></tr></table></figure></li>
+</ol>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/08/16/python%E5%AD%90%E7%BA%BF%E7%A8%8B%E5%BC%82%E5%B8%B8%E6%8D%95%E8%8E%B7/">
+                        <span class="hidden-mobile">python子线程异常捕获</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://www.ecnu.edu.cn/" target="_blank" rel="nofollow noopener"><span>华东师范大学</span></a> <i class="iconfont icon-love"></i> <span>国家可信嵌入式软件工程技术研究中心</span> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

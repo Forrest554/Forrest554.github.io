@@ -18,7 +18,7 @@
   <meta name="author" content="Euler">
   <meta name="keywords" content="">
   
-  <title>ubuntu安装rabbitMQ - Euler Blog</title>
+  <title>python子线程异常捕获 - Euler Blog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -163,7 +163,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="ubuntu安装rabbitMQ">
+            <span class="h2" id="subtitle" title="python子线程异常捕获">
               
             </span>
 
@@ -173,8 +173,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-06-15 16:09" pubdate>
-        2021年6月15日 下午
+      <time datetime="2021-08-16 17:24" pubdate>
+        2021年8月16日 下午
       </time>
     </span>
   
@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      144 字
+      575 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      2
+      7
        分钟
     </span>
   
@@ -225,22 +225,26 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">ubuntu安装rabbitMQ</h1>
+            <h1 style="display: none">python子线程异常捕获</h1>
             
             <div class="markdown-body">
-              <ol>
-<li><p>安装erlang</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo apt-get install erlang-nox<br></code></pre></td></tr></table></figure></li>
-<li><p>安装Rabbitmq</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo apt-get install rabbitmq-server<br></code></pre></td></tr></table></figure></li>
-<li><p>添加admin，并赋予administrator权限</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 添加admin用户，密码设置为admin</span><br>sudo rabbitmqctl add_user  admin  admin  <br><br><span class="hljs-comment"># 赋予权限</span><br>sudo rabbitmqctl set_user_tags admin administrator<br><br><span class="hljs-comment"># 赋予virtual host中所有资源的配置、写、读权限以便管理其中的资源</span><br>sudo rabbitmqctl  set_permissions -p / admin <span class="hljs-string">&#x27;.*&#x27;</span> <span class="hljs-string">&#x27;.*&#x27;</span> <span class="hljs-string">&#x27;.*&#x27;</span><br></code></pre></td></tr></table></figure></li>
-<li><p>RabbitMQ GUID使用</p>
-<p>安装了Rabbitmq后，默认也安装了该管理工具，执行命令即可启动</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo rabbitmq-plugins <span class="hljs-built_in">enable</span> rabbitmq_management<br></code></pre></td></tr></table></figure></li>
-<li><p>启动、停止、重启、状态rabbitMq命令</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo rabbitmq-server start<br>sudo rabbitmq-server stop<br>sudo rabbitmq-server restart<br>sudo rabbitmqctl status<br></code></pre></td></tr></table></figure></li>
+              <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近做项目的时候，使用了多线程，但是在主线程（比如main函数）里面不能捕获异常，查阅资料发现：</p>
+<blockquote>
+<p>使用start()方法启动子线程时，解释器会为子线程开辟独立的栈空间，主线程自然就无法获取子线程栈的信息。当线程异常中止时，会自行退出而不会将此异常raise到主线程。那么得知了原因，就可以找到解决的办法了。思路是继承标准库的Thread类，进行一些小的改写封装。</p>
+</blockquote>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><ol>
+<li><p>继承threading.Thread</p>
+<p>主要思路就是通过给类加入新的变量<code>exitcode</code>，通过判断是0还是1来判断是否有异常，同时通过<code>exception</code>来保存子线程的异常。<br>由于项目需求，所以在继承的时候，对于<code>__init__</code>函数尽可能和原先一样，然后模仿原来的<code>run()</code>函数进程重写。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 类名自己取 EulerThread</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">EulerThread</span>(<span class="hljs-params">threading.Thread</span>):</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span>(<span class="hljs-params">self, group=<span class="hljs-literal">None</span>, target=<span class="hljs-literal">None</span>, name=<span class="hljs-literal">None</span>, args=(<span class="hljs-params"></span>), kwargs=<span class="hljs-literal">None</span>, daemon=<span class="hljs-literal">None</span></span>):</span><br>        <span class="hljs-built_in">super</span>(EulerThread, self).__init__(group=group, target=target, name=name, args=args, kwargs=kwargs, daemon=daemon)<br>        self.exitcode = <span class="hljs-number">0</span><br>        self.exception = <span class="hljs-literal">None</span><br>        self.exc_traceback = <span class="hljs-string">&#x27;&#x27;</span><br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">run</span>(<span class="hljs-params">self</span>):</span><br>        <span class="hljs-keyword">try</span>:<br>            <span class="hljs-keyword">if</span> self._target:<br>                self._target(*self._args, **self._kwargs)<br>        <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:<br>            self.exception = e<br>            self.exitcode = <span class="hljs-number">1</span>  <span class="hljs-comment"># 如果线程异常退出，将该标志位设置为1，正常退出为0</span><br>            self.exc_traceback = <span class="hljs-string">&#x27;&#x27;</span>.join(traceback.format_exception(*sys.exc_info()))  <span class="hljs-comment"># 在改成员变量中记录异常信息</span><br>        <span class="hljs-keyword">finally</span>:<br>            <span class="hljs-keyword">del</span> self._target, self._args, self._kwargs<br></code></pre></td></tr></table></figure></li>
+<li><p>调用方法以及封装<br>由于项目需求是多个子线程，使用子线程调动类方法进行多线程，对线程进行重复的<code>setDemo</code>，<code>start</code>，<code>join</code>方法，因此可以统一封装。</p>
+<p><strong>注：</strong></p>
+<ul>
+<li><strong>子线程必须使用join方法，否则内存里面只有<code>EulerThread</code>类的初始值，后续的变化不会加入内存，也就是说<code>exitcode</code>一直是0</strong></li>
+<li><strong><code>start</code>方法会调用<code>run</code>方法，所以重写<code>run</code>就可以。</strong></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">start_thread</span>(<span class="hljs-params">target</span>):</span><br>    thread_service = EulerThread(target=target)<br>    thread_service.setDaemon(<span class="hljs-literal">True</span>)<br>    thread_service.start()<br>    thread_service.join()<br>    <span class="hljs-keyword">return</span> thread_service<br><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">raise_from_thread</span>(<span class="hljs-params">euler_thread</span>):</span><br>    <span class="hljs-keyword">if</span> euler_thread.exitcode == <span class="hljs-number">1</span>:<br>        <span class="hljs-keyword">raise</span> euler_thread.exception<br>        <br><span class="hljs-comment"># main 函数操作</span><br><br><span class="hljs-comment"># CoverManager是项目中的一个类，里面的是参数无需理会</span><br>cover_manager = CoverManager(MQ_send,connection_send, task_id, task_type, aim, lm_path, coco_path, class_name, test_size)<br><span class="hljs-comment"># 创建一个类</span><br>thread_train_service = start_thread(target=cover_manager.cover)<br>raise_from_thread(thread_train_service)<br></code></pre></td></tr></table></figure></li>
 </ol>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/ywq935/article/details/86577801">Python子线程异常捕获 &amp; Python自定义优化线程池</a></p>
 
             </div>
             <hr>
@@ -261,9 +265,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/08/16/python%E5%AD%90%E7%BA%BF%E7%A8%8B%E5%BC%82%E5%B8%B8%E6%8D%95%E8%8E%B7/">
+                      <a href="/2021/08/16/MMDET%E4%B8%ADlogger%E6%80%9D%E8%80%83/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">python子线程异常捕获</span>
+                        <span class="hidden-mobile">MMDET中logger思考</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -271,8 +275,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/04/15/%E5%9C%A8lxd%E5%AE%B9%E5%99%A8%E4%B8%AD%E4%BD%BF%E7%94%A8docker%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/">
-                        <span class="hidden-mobile">在lxc容器中使用docker遇到的问题</span>
+                      <a href="/2021/06/15/ubuntu%E5%AE%89%E8%A3%85rabbitMQ/">
+                        <span class="hidden-mobile">ubuntu安装rabbitMQ</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

@@ -182,6 +182,81 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2021/08/16/MMDET%E4%B8%ADlogger%E6%80%9D%E8%80%83/">MMDET中logger思考</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/08/16/MMDET%E4%B8%ADlogger%E6%80%9D%E8%80%83/">
+          
+          
+            
+          
+          背景最近项目对MMDET进行二次开发时，发现在使用mmdet中的logger时候，发现在同一个进程（主进程），指向的logger对象只有一个跟logger，也就是说，即使传给函数不用的输出打印位置，最后都只在一个文件里有显示。而项目中，需要对不同的训练任务，指定不同的位置log。通过阅读mmdet、mmcv、logging源码，做出如下修改。
+方法
+原函数查看对mmdet的mmdetection/
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-08-16 17:45" pubdate>
+              2021-08-16
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/08/16/python%E5%AD%90%E7%BA%BF%E7%A8%8B%E5%BC%82%E5%B8%B8%E6%8D%95%E8%8E%B7/">python子线程异常捕获</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/08/16/python%E5%AD%90%E7%BA%BF%E7%A8%8B%E5%BC%82%E5%B8%B8%E6%8D%95%E8%8E%B7/">
+          
+          
+            
+          
+          背景最近做项目的时候，使用了多线程，但是在主线程（比如main函数）里面不能捕获异常，查阅资料发现：
+
+使用start()方法启动子线程时，解释器会为子线程开辟独立的栈空间，主线程自然就无法获取子线程栈的信息。当线程异常中止时，会自行退出而不会将此异常raise到主线程。那么得知了原因，就可以找到解决的办法了。思路是继承标准库的Thread类，进行一些小的改写封装。
+
+方法
+继承threading
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-08-16 17:24" pubdate>
+              2021-08-16
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2021/06/15/ubuntu%E5%AE%89%E8%A3%85rabbitMQ/">ubuntu安装rabbitMQ</a>
       </h1>
 
@@ -541,89 +616,6 @@ dpkg安装teamviewer
             <i class="iconfont icon-tags"></i>
             
               <a href="/tags/Teamviewer/">Teamviewer</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/03/17/%E4%BD%BF%E7%94%A8apt%E5%AE%89%E8%A3%85Nvidia%E9%A9%B1%E5%8A%A8/">使用apt安装Nvidia驱动</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/03/17/%E4%BD%BF%E7%94%A8apt%E5%AE%89%E8%A3%85Nvidia%E9%A9%B1%E5%8A%A8/">
-          
-          
-            
-          
-          命令行安装驱动12345# 查看显卡信息ubuntu-drivers devices# 安装驱动sudo ubuntu-drivers autoinstall # 自动sudo apt install nvidia-340 # 根据信息指定版本
-
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-03-17 22:34" pubdate>
-              2021-03-17
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E4%B8%80%E4%BA%9B%E5%B0%8Ftips/">一些小tips</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/03/17/clone-github%E4%BD%BF%E7%94%A8%E5%9B%BD%E5%86%85%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F/">clone github使用国内镜像加速</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/03/17/clone-github%E4%BD%BF%E7%94%A8%E5%9B%BD%E5%86%85%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F/">
-          
-          
-            
-          
-          GitHub clone加速啊1234567# 这是我们要clone的git clone https://github.com/Hackergeek/architecture-samples# 使用镜像git clone https://github.com.cnpmjs.org/open-mmlab/mmdetection.gitgit clone https://github.com.cnpm
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-03-17 22:34" pubdate>
-              2021-03-17
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E4%B8%80%E4%BA%9B%E5%B0%8Ftips/">一些小tips</a>
             
           </div>
         
