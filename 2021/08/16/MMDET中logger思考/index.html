@@ -228,7 +228,7 @@
             <h1 style="display: none">MMDET中logger思考</h1>
             
             <div class="markdown-body">
-              <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近项目对MMDET进行二次开发时，发现在使用mmdet中的logger时候，发现在同一个进程（主进程），指向的logger对象只有一个跟logger，也就是说，即使传给函数不用的输出打印位置，最后都只在一个文件里有显示。<br>而项目中，需要对不同的训练任务，指定不同的位置log。通过阅读mmdet、mmcv、logging源码，做出如下修改。</p>
+              <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近项目对MMDET进行二次开发时，发现在使用mmdet中的logger时候，发现在同一个进程（主进程），指向的logger对象只有一个根logger，也就是说，即使传给函数不用的输出打印位置，最后都只在一个文件里有显示。<br>而项目中，需要对不同的训练任务，指定不同的位置log。通过阅读mmdet、mmcv、logging源码，做出如下修改。</p>
 <h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><ol>
 <li><p>原函数查看对mmdet的<code>mmdetection/tools/train.py</code>文件中的<code>get_root_logger</code>进行查看，发现最后是<code>mmcv/utils/logging.py</code>文件的<code>get_logger</code>函数，可以看到原函数通过判断name是否存在，返回相应的logger对象，因为每次训练都是“mmdet”，所以返回的logger都是同一个。因此把这一个判断删除，冰球修改句柄中的File句柄就可以了。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># mmdetection/tools/train.py 训练调用的函数</span><br><span class="hljs-keyword">from</span> mmdet.utils <span class="hljs-keyword">import</span> get_root_logger<br><br>logger = get_root_logger(log_file=log_file, log_level=cfg.log_level)<br></code></pre></td></tr></table></figure>
