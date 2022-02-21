@@ -1,7 +1,9 @@
 ---
 title: LXD容器配置和使用
 date: 2021-03-17 22:30:15
-tags: 实验室文档
+tags: 
+      - LXD 
+      - 实验室文档
 ---
 
 ## reference:
@@ -182,10 +184,10 @@ tags: 实验室文档
       sudo iptables -I INPUT -p tcp --dport 60601 -j ACCEPT
       # 做端口转发 其中Hostip为宿主机的ip，Hostport为宿主机的端口号，Containerip为容器的ip
       # iptables –t nat –A PREROUTING –d Hostip –p tcp –dport Hostport –j DNAT –to Containerip:22
-    sudo iptables -t nat -A PREROUTING -d 192.168.3.171 -p tcp --dport 60605 -j DNAT --to 10.19.231.192:22
-    sudo iptables -t nat -A PREROUTING -d 192.168.3.171 -p tcp --dport 60615 -j DNAT --to 10.19.231.192:3389
-    # 保存规则
-    sudo sh -c "iptables-save > /etc/iptables.rules"
+      sudo iptables -t nat -A PREROUTING -d 192.168.3.171 -p tcp --dport 60605 -j DNAT --to 10.19.231.192:22
+      sudo iptables -t nat -A PREROUTING -d 192.168.3.171 -p tcp --dport 60615 -j DNAT --to 10.19.231.192:3389
+      # 保存规则
+      sudo sh -c "iptables-save > /etc/iptables.rules"
     ```
     
   - 为容器添加显卡
@@ -194,7 +196,7 @@ tags: 实验室文档
       # 添加所有显卡
       sudo lxc config device add containerOri gpu gpu
       # 添加指定GPU
-    sudo lxc config device add yourContainerName gpu0 gpu id=0
+      sudo lxc config device add yourContainerName gpu0 gpu id=0
     ```
 
   - 创建共享目录
@@ -205,7 +207,7 @@ tags: 实验室文档
       sudo lxc config set <container> security.privileged true
       sudo lxc config device add <container> <device-name> disk path=/home/xxx/share source=/home/xxx/share
       # 移除
-    sudo lxc config device remove <container> <device-name>
+      sudo lxc config device remove <container> <device-name>
     ```
 
   - 安装桌面环境、xrdp
@@ -214,14 +216,14 @@ tags: 实验室文档
       sudo apt install --no-install-recommends ubuntu-desktop
       sudo apt-get install xrdp
       # 为xrdp添加端口转发
-    sudo lxc config device add containerOri proxy1 proxy listen=tcp:192.168.3.171:60611 connect=tcp:10.19.231.69:3389 bind=host
+      sudo lxc config device add containerOri proxy1 proxy listen=tcp:192.168.3.171:60611 connect=tcp:10.19.231.69:3389 bind=host
       
     ```
     
 
 ## 使用
 
-1. 复制容器
+1. 复制容器[也可以创建模版，通过模版发布]
 
    ```bash
    sudo lxc cp ljh new

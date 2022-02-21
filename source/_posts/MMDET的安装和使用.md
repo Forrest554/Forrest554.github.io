@@ -54,7 +54,7 @@ tags:
     pip install torch-1.7.0+cu110-cp37-cp37m-linux_x86_64.whl
     ```
 
-- 3. 安装mmcv(1.2)
+- 3. 安装mmcv-full(1.2)
 
   - 方法一
 
@@ -121,7 +121,7 @@ tags:
 
   - 方法三
 
-    git 下载mmcv(2.6)源码后，通过git checkout命令修改版本，然后编译mmcv
+    git 下载mmdet(2.6)源码后，通过```git checkout v2.6.0```命令修改版本，然后编译mmcv
 
 - 4. 在home的用户目录创建MMD父目录并克隆mmdetection存储库
 
